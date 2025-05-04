@@ -1,2 +1,15 @@
 # Python virtual environment
 .venv/
+.env
+# secrets/
+# IDE files
+.idea/
+.vscode/
+# Python cache
+__pycache__/
+# Cython debug symbols
+cython_debug/
+# Pytest cache
+.cache/
+# Coverage reports
+.coverage
