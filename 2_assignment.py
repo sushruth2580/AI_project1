@@ -2,81 +2,50 @@ import os
 import openai
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
 load_dotenv()
-key = os.getenv("OPEN_API_KEY")
+api_key = os.getenv("OPEN_API_KEY")
 
-# Create a client instance
-# Set your API key
-client = openai.OpenAI(api_key=key)
+# Initialize the OpenAI client
+client = openai.OpenAI(api_key=api_key)
 
-#Define the review
-input_array_int = input("Enter a list of integer:")
-input_target = input("Enter a target:")
+# Get user input for the integer array and target value
+input_array_int = input(" Enter a list of integers (e.g., [1, 2, 3, 4, 5]): ")
+input_target = input(" Enter the target sum: ")
 
-
-# Writing AI agent
+# Create messages for the system and user instructions
 messages = [
     {
         "role": "system",
-        "content": " write an Python function that finds all the possible combination of target number provided by the user. All outputs should be a unique pairs of numbers whose sum equals the target.(e.g., avoid both (2, 3) and (3, 2)). Optimize your solution for time and space complexity  "
+        "content": (
+            "You are an expert Python programmer.\n"
+            "Write an optimized Python function that takes a list of integers and a target sum, "
+            "and returns all unique pairs of numbers whose sum equals the target.\n"
+            "Ensure:\n"
+            "- Each pair is unique (e.g., (2,3) is same as (3,2), only one should appear)\n"
+            "- Time and space complexity are optimized\n"
+            "- Output is clean and easy to read"
+        )
     },
-     {
+    {
         "role": "user",
-        "content": f'The integar array :\n\n"{input_array_int}"\n\n The targer :\n\n"{input_target}"\n\n:'
+        "content": f"The integer array is: {input_array_int}\nTarget sum: {input_target}"
     }
 ]
 
-# Call the GPT-4o model
+# Call the GPT model
 response = client.chat.completions.create(
-    model = "gpt-4o",#"gpt-4-turbo",
+    model="gpt-4o",
     messages=messages,
     temperature=0
 )
 
-#Extract and print the result
-# print(response)
-result = response.choices[0].message.content
-print(f"Result:{result}")
-
-
-# def find_unique_pairs(nums, target):
-#     # First, sort the array
-#     nums.sort()
-
-#     # Initialize two pointers
-#     left, right = 0, len(nums) - 1
-
-#     # To store the unique pairs
-#     unique_pairs = []
-
-#     while left < right:
-#         current_sum = nums[left] + nums[right]
-
-#         if current_sum == target:
-#             # Add the pair to the result
-#             unique_pairs.append((nums[left], nums[right]))
-
-#             # Move both pointers to find the next unique pair
-#             left += 1
-#             right -= 1
-
-#             # Skip duplicates
-#             while left < right and nums[left] == nums[left - 1]:
-#                 left += 1
-#             while left < right and nums[right] == nums[right + 1]:
-#                 right -= 1
-
-#         elif current_sum < target:
-#             # Move the left pointer to increase the sum
-#             left += 1
-#         else:
-#             # Move the right pointer to decrease the sum
-#             right -= 1
-
-#     return unique_pairs
-
-# # Example usage
-# nums = [2, 3, 4, 5, 6, 0]
-# target = 8
-# print(find_unique_pairs(nums, target))
-
+# Extract and print the generated Python function
+generated_code = response.choices[0].message.content
+print("\n Generated Python Function:\n")
+print(generated_code)
+print("\n\n Example Usage:")
+print(generated_code + "(input_array_int, input_target)")
+print("\n\n")   
+# Note: The above code assumes that the OpenAI API key is stored in a .env file
+# and that the OpenAI Python client is properly installed and configured.
