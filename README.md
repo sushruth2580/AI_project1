@@ -1,4 +1,4 @@
-# 🧠 AI-Powered NLP Projects & Utilities
+#  AI-Powered NLP Projects & Utilities
 
 This repository contains a collection of Python scripts leveraging the OpenAI GPT-4o model to perform a range of Natural Language Processing tasks. The tools are built to be educational, modular, and easy to experiment with for students and developers alike.
 
@@ -12,7 +12,7 @@ This repository contains a collection of Python scripts leveraging the OpenAI GP
 | `demo_writing.py` | Asks the AI to explain or write on a user-given topic. |
 | `Walmart.csv` | Sample dataset used for data analysis and preprocessing in earlier assignments. |
 
-## 🚀 Features
+##  Features
 
 - Grammar and spelling correction
 - Sentiment classification
@@ -22,14 +22,14 @@ This repository contains a collection of Python scripts leveraging the OpenAI GP
 - Command-line interface
 - Easy configuration via `.env` (for API key management)
 
-## 🛠 Requirements
+##  Requirements
 
 - Python 3.8+
 - `openai`
 - `python-dotenv`
 - API key from OpenAI (stored securely in a `.env` file)
 
-## 🔧 Setup
+##  Setup
 
 ```bash
 git clone https://github.com/your-username/your-repo-name.git
