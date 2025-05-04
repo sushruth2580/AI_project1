@@ -1,46 +1,53 @@
-# Write asking an LLM to summarize a news article. Allow user to input multiple lines and then type END to indicate user is done uploaded the news
-# Test prompt on the same article using GPT-4
-# Analyze & summarize the news about the tone & detail level.
-
-import openai
 import os
+import openai
 from dotenv import load_dotenv
 
-load_dotenv() 
-OpenAI_Key = os.getenv("OPENAI_API_KEY")
+# Load OpenAI API key from environment
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
 
-# Set your API key
-client = openai.OpenAI(api_key=OpenAI_Key)
+# Initialize OpenAI client
+client = openai.OpenAI(api_key=api_key)
 
-def get_article():
-    data = []
-    print("Enter your input (type 'END' on a new line to finish):.")
-    
+def get_news_article():
+    """Prompt user to enter a news article. Accepts multiple lines until 'END' is entered."""
+    print("📰 Please paste your news article below. Type 'END' on a new line when you're done:\n")
+    lines = []
     while True:
-        user_input = input("You: ")
-        if user_input.lower() == "end":
-            break  
-        data.append(user_input)
-    merged_data = "\n".join(data)
-    return merged_data
+        line = input()
+        if line.strip().lower() == "end":
+            break
+        lines.append(line)
+    return "\n".join(lines)
 
-# Get user input
-paragraph  = get_article()  
-print(f"User data: {paragraph}")
+# Capture user input
+article_text = get_news_article()
+print("\n✅ News article received.\n")
 
-# Define the prompt 3
+# Prepare messages for OpenAI model
 messages = [
-    {"role": "system", "content": "Summarize the news in few sentences. Highlight the important points like events, issues. Avoid any speculation or opinions. Tailor the summary for students"},
-    {"role": "user", "content": f'Article summary :\n\n"{paragraph}"\n\n:'}
+    {
+        "role": "system",
+        "content": (
+            "You are a helpful assistant that summarizes news articles clearly and objectively. "
+            "Summarize the key events and issues in a few sentences. Avoid speculation, personal opinions, or excessive detail. "
+            "Tailor the summary for students who want to understand current events quickly."
+        )
+    },
+    {
+        "role": "user",
+        "content": article_text
+    }
 ]
 
-# Call the GPT-4o model
+# Call GPT-4o model
 response = client.chat.completions.create(
     model="gpt-4o",
     messages=messages,
-    temperature=0 #0-20, 0 is the most deterministic and 2 is the most creative
+    temperature=0  # Use 0 for deterministic and fact-based summary
 )
 
-# Extract and print the result
-summary_response = response.choices[0].message.content.strip()
-print(f"Summary : {summary_response}")
+# Extract and display the summary
+summary = response.choices[0].message.content.strip()
+print("📝 News Summary:\n")
+print(summary)
