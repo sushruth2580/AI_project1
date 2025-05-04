@@ -1,31 +1,46 @@
 import os
 import openai
-from dotenv import load_dotenv #for secret key
+from dotenv import load_dotenv  # For loading environment variables securely
 
+# Load the OpenAI API key from .env file
 load_dotenv()
-key = os.getenv("OPEN_API_KEY")
+api_key = os.getenv("OPEN_API_KEY")
 
-# Create a client instance
-# Set your API key
-client = openai.OpenAI(api_key=key)
+# Initialize the OpenAI client
+client = openai.OpenAI(api_key=api_key)
 
+# Prompt user for the paragraph to translate
+input_paragraph = input("\nPlease Enter the English paragraph about renewable energy systems:\n")
 
-# Writing AI agent
+# Prepare the system and user messages
 messages = [
     {
         "role": "system",
-        "content": " Convert the given paragraph from English to Spanish language. The paragrah describes the key features of advanced renewable energy system. Ensure to use the correct terminology related to the renewable energy sector. It should use the correct technical terms and translate the concept "
+        "content": (
+            "You are a professional technical translator. "
+            "Translate the following English paragraph into Spanish. "
+            "Ensure the translation uses accurate renewable energy terminology, "
+            "technical vocabulary, and conveys the original concept precisely."
+        )
+    },
+    {
+        "role": "user",
+        "content": input_paragraph
     }
 ]
 
-# Call the GPT-4o model
+# Make the API call using GPT-4o
 response = client.chat.completions.create(
-    model = "gpt-4o",
+    model="gpt-4o",
     messages=messages,
     temperature=0
 )
 
-#Extract and print the result
-# print(response)
-result = response.choices[0].message.content
-print(f"Result:{result}")
+# Extract and print the translated paragraph
+translated_text = response.choices[0].message.content
+print("\n🌍 Translated Paragraph (Spanish):\n")
+print(translated_text)
+# Save the translated paragraph to a file
+output_filename = "translated_paragraph.txt"
+with open(output_filename, "w", encoding="utf-8") as file:
+    file.write(translated_text)
